@@ -41,8 +41,6 @@ class User(BaseModel):
 
 # 4. Seed Function
 async def seed_users():
-    async def seed_users():
-    # 1. Create the application user (Equivalent to your init-db.js)
     try:
         await db.command("createUser", "clinic_admin", 
                          pwd="p@ssw0rd_db_user", 
