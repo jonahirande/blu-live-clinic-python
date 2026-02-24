@@ -1,4 +1,5 @@
 import os
+import urllib.parse
 import asyncio
 from typing import List, Optional
 from datetime import datetime
@@ -8,6 +9,8 @@ from pydantic import BaseModel, Field
 from motor.motor_asyncio import AsyncIOMotorClient
 from bson import ObjectId
 
+db_user = "clinic_admin"
+db_pass = "p@ssw0rd_db_user"
 app = FastAPI()
 
 # 1. CORS Configuration (Matches your app.use(cors()))
@@ -20,7 +23,7 @@ app.add_middleware(
 
 # 2. Database Connection
 # Force it to use localhost (127.0.0.1)
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://clinic_admin:p@ssw0rd_db_user@127.0.0.1:27017/liveclinic?authSource=admin")
+MONGO_URI = f"mongodb://{db_user}:{safe_pass}@127.0.0.1:27017/liveclinic?authSource=admin"
 client = AsyncIOMotorClient(MONGO_URI)
 db = client.liveclinic
 users_collection = db.users
