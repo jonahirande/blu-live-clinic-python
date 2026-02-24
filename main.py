@@ -41,6 +41,24 @@ class User(BaseModel):
 
 # 4. Seed Function
 async def seed_users():
+    async def seed_users():
+    # 1. Create the application user (Equivalent to your init-db.js)
+    try:
+        await db.command("createUser", "clinic_admin", 
+                         pwd="p@ssw0rd_db_user", 
+                         roles=[{"role": "readWrite", "db": "liveclinic"}])
+        print("👤 Database user created")
+    except Exception as e:
+        # User might already exist, which is fine
+        print("ℹ️ User setup skipped (likely already exists)")
+
+    # 2. Ensure 'users' collection exists
+    collections = await db.list_collection_names()
+    if 'users' not in collections:
+        await db.create_collection('users')
+        print("📁 'users' collection created")
+
+    # 3. Rest of your existing seed logic (doctors/admins)...
     doctors = ['Jonah Irande', 'Oluwatosin Daniel', 'Faith Bitrus']
     for name in doctors:
         await users_collection.update_one(
