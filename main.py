@@ -19,7 +19,8 @@ app.add_middleware(
 )
 
 # 2. Database Connection
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://mongodb:27017/liveclinic")
+# Force it to use localhost (127.0.0.1)
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://clinic_admin:p@ssw0rd_db_user@127.0.0.1:27017/liveclinic?authSource=admin")
 client = AsyncIOMotorClient(MONGO_URI)
 db = client.liveclinic
 users_collection = db.users
