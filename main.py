@@ -118,4 +118,37 @@ async def assign_doctor(data: dict):
     )
     return {"msg": "Assigned"}
 
-@app.
+@app.put("/api/reset-password")
+async def reset_password(data: dict):
+    patient_id = data.get("patientId")
+    new_password = data.get("newPassword")
+    result = await users_collection.update_one(
+        {"_id": ObjectId(patient_id)},
+        {"$set": {"password": new_password}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Patient not found")
+    return {"msg": "Password Reset Successful"}
+
+@app.put("/api/diagnose")
+async def diagnose(data: dict):
+    patient_id = data.get("patientId")
+    await users_collection.update_one(
+        {"_id": ObjectId(patient_id)},
+        {"$set": {
+            "diagnosis": data.get("diagnosis"),
+            "prescription": data.get("prescription"),
+            "status": "Completed"
+        }}
+    )
+    return {"msg": "Finalized"}
+
+@app.delete("/api/patients/{patient_id}")
+async def delete_patient(patient_id: str):
+    await users_collection.delete_one({"_id": ObjectId(patient_id)})
+    return {"msg": "Deleted"}
+
+if __name__ == "__main__":
+    import uvicorn
+    # Listening on HTTP (Port 5000)
+    uvicorn.run(app, host="0.0.0.0", port=5000)
