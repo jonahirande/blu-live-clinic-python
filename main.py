@@ -18,8 +18,7 @@ db_pass = "p@ssw0rd_db_user"
 safe_pass = urllib.parse.quote_plus(db_pass)
 
 # Force localhost 127.0.0.1 for GitHub Codespaces
-MONGO_URI = f"mongodb://{db_user}:{safe_pass}@127.0.0.1:27017/liveclinic?authSource=admin"
-
+MONGO_URI = "mongodb://127.0.0.1:27017/liveclinic"
 client = AsyncIOMotorClient(MONGO_URI)
 db = client.liveclinic
 users_collection = db.users
